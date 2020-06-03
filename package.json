@@ -1,0 +1,41 @@
+{
+  "name": "@naturalcycles/sqlite-lib",
+  "scripts": {},
+  "dependencies": {
+    "@naturalcycles/db-lib": "^8.7.0",
+    "@naturalcycles/js-lib": "^14.27.0",
+    "@naturalcycles/nodejs-lib": "^12.14.5",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "@naturalcycles/dev-lib": "^11.8.2",
+    "@types/node": "^15.12.5",
+    "jest": "^27.0.5"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/test",
+    "!src/**/*.test.ts",
+    "!src/**/__snapshots__",
+    "!src/**/__exclude"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NaturalCycles/sqlite-lib"
+  },
+  "engines": {
+    "node": ">=12.13.1"
+  },
+  "version": "0.0.0",
+  "description": "CommonDB implementation based on SQLite",
+  "author": "Natural Cycles Team",
+  "license": "MIT"
+}
