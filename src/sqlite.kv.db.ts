@@ -65,7 +65,6 @@ export class SQLiteKVDB implements CommonKVDB {
     await this.open()
   }
 
-  // todo: override
   async createTable(table: string, opt: CommonDBCreateOptions = {}): Promise<void> {
     if (opt.dropIfExists) await this.dropTable(table)
 

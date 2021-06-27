@@ -700,9 +700,9 @@
     typescript "^4.0.2"
 
 "@naturalcycles/db-lib@^8.7.0":
-  version "8.7.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-8.7.0.tgz#6ed067de5c37dd0fbf89b60702250b729613f6c3"
-  integrity sha512-w0B9HvmCEaN+GyzanXzabMiDu21IWt19rFdr0CJglEpU+t91zWltNY3AKArrTpOT1cqnGSzy+ejLH+ydE7To5g==
+  version "8.7.1"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-8.7.1.tgz#1cb8733eddef6de8c468cd69ee5e4c7c2e9476d4"
+  integrity sha512-Qex6i/vRqwYsYXvT/A/I34VXigx0h7iLz/F5OEtx0d24wkbvmZOfqIzFLyz0NN7jp81AgbsqAomyockDtWK02w==
   dependencies:
     "@naturalcycles/js-lib" "^14.0.0"
     "@naturalcycles/nodejs-lib" "^12.0.0"
