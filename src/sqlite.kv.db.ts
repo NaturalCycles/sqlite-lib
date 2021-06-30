@@ -98,7 +98,7 @@ export class SQLiteKVDB implements CommonKVDB {
     // todo: speedup
     const statements = insertKVSQL(table, batch)
 
-    if (statements.length > 1) await this.db.run('BEGIN TRANSACTION')
+    // if (statements.length > 1) await this.db.run('BEGIN TRANSACTION')
 
     await pMap(statements, async statement => {
       const [sql, params] = statement
@@ -106,6 +106,14 @@ export class SQLiteKVDB implements CommonKVDB {
       await this.db.run(sql, ...params)
     })
 
-    if (statements.length > 1) await this.db.run('END TRANSACTION')
+    // if (statements.length > 1) await this.db.run('END TRANSACTION')
+  }
+
+  async beginTransaction(): Promise<void> {
+    await this.db.run(`BEGIN TRANSACTION`)
+  }
+
+  async endTransaction(): Promise<void> {
+    await this.db.run(`END TRANSACTION`)
   }
 }
