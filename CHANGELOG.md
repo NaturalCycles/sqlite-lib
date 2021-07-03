@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.1...v1.0.2) (2021-07-03)
+
+
+### Bug Fixes
+
+* don't begin/end transaction in saveBatch ([e01ec93](https://github.com/NaturalCycles/sqlite-lib/commit/e01ec9329122d4160cd26b83da3fcb522ac6fb42))
+
 ## [1.0.1](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.0...v1.0.1) (2021-06-27)
 
 
