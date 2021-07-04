@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.2...v1.0.3) (2021-07-04)
+
+
+### Bug Fixes
+
+* adapt naming `KV` => `KeyValue` ([193e80b](https://github.com/NaturalCycles/sqlite-lib/commit/193e80b370e7bcb52a63aeb516bb9745799b943d))
+
 ## [1.0.2](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.1...v1.0.2) (2021-07-03)
 
 
