@@ -1,4 +1,4 @@
-import { CommonDBCreateOptions, CommonKVDB } from '@naturalcycles/db-lib'
+import { CommonDBCreateOptions, CommonKeyValueDB } from '@naturalcycles/db-lib'
 import { pMap, StringMap } from '@naturalcycles/js-lib'
 import { Debug } from '@naturalcycles/nodejs-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
@@ -7,7 +7,7 @@ import * as sqlite3 from 'sqlite3'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
 import { deleteByIdsSQL, insertKVSQL, selectKVSQL } from './query.util'
 
-export interface SQLiteKVDBCfg {
+export interface SQLiteKeyValueDBCfg {
   filename: string
 
   /**
@@ -33,8 +33,8 @@ interface KVObject {
 
 const log = Debug('nc:sqlite')
 
-export class SQLiteKVDB implements CommonKVDB {
-  constructor(public cfg: SQLiteKVDBCfg) {}
+export class SqliteKeyValueDB implements CommonKeyValueDB {
+  constructor(public cfg: SQLiteKeyValueDBCfg) {}
 
   _db?: Database
 

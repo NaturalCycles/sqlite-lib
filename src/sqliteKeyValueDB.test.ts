@@ -1,7 +1,7 @@
-import { runCommonKVDBTest, TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
-import { SQLiteKVDB } from './sqlite.kv.db'
+import { runCommonKeyValueDBTest, TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
+import { SqliteKeyValueDB } from './sqliteKeyValueDB'
 
-const db = new SQLiteKVDB({
+const db = new SqliteKeyValueDB({
   filename: ':memory:',
   // filename: `${tmpDir}/testdb.sqlite`,
 })
@@ -15,7 +15,7 @@ beforeAll(async () => {
 
 afterAll(async () => await db.close())
 
-describe('runCommonKVDBTest', () => runCommonKVDBTest(db))
+describe('runCommonKeyValueDBTest', () => runCommonKeyValueDBTest(db))
 
 // test('test1', async () => {
 //   await db.deleteByIds(TEST_TABLE, ['id1', 'id2'])
