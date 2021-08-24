@@ -1,11 +1,12 @@
-import { CommonDBCreateOptions, CommonKeyValueDB } from '@naturalcycles/db-lib'
-import { pMap, StringMap } from '@naturalcycles/js-lib'
-import { Debug } from '@naturalcycles/nodejs-lib'
+import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
+import { pMap } from '@naturalcycles/js-lib'
+import { Debug, readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
 import { Database, open } from 'sqlite'
 import * as sqlite3 from 'sqlite3'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
 import { deleteByIdsSQL, insertKVSQL, selectKVSQL } from './query.util'
+import { SqliteReadable } from './stream.util'
 
 export interface SQLiteKeyValueDBCfg {
   filename: string
@@ -21,12 +22,14 @@ export interface SQLiteKeyValueDBCfg {
   driver?: any
 
   /**
+   * Will log all sql queries executed.
+   *
    * @default false
    */
   debug?: boolean
 }
 
-interface KVObject {
+interface KeyValueObject {
   id: string
   v: Buffer
 }
@@ -86,17 +89,21 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
     await this.db.run(sql)
   }
 
-  async getByIds(table: string, ids: string[]): Promise<Buffer[]> {
+  /**
+   * API design note:
+   * Here in the array of rows we have no way to map row to id (it's an opaque Buffer).
+   */
+  async getByIds(table: string, ids: string[]): Promise<KeyValueDBTuple[]> {
     const sql = selectKVSQL(table, ids)
     if (this.cfg.debug) console.log(sql)
-    const rows = await this.db.all<KVObject[]>(sql)
+    const rows = await this.db.all<KeyValueObject[]>(sql)
     // console.log(rows)
-    return rows.map(r => r.v)
+    return rows.map(r => [r.id, r.v])
   }
 
-  async saveBatch(table: string, batch: StringMap<Buffer>): Promise<void> {
+  async saveBatch(table: string, entries: KeyValueDBTuple[]): Promise<void> {
     // todo: speedup
-    const statements = insertKVSQL(table, batch)
+    const statements = insertKVSQL(table, entries)
 
     // if (statements.length > 1) await this.db.run('BEGIN TRANSACTION')
 
@@ -115,5 +122,74 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
 
   async endTransaction(): Promise<void> {
     await this.db.run(`END TRANSACTION`)
+  }
+
+  streamIds(table: string, limit?: number): ReadableTyped<string> {
+    const readable = readableCreate<string>()
+
+    let sql = `SELECT id FROM ${table}`
+    if (limit) {
+      sql += ` LIMIT ${limit}`
+    }
+
+    void SqliteReadable.create<{ id: string }>(this.db, sql).then(async stream => {
+      for await (const row of stream) {
+        readable.push(row.id)
+      }
+
+      // Close the statement before "finishing" the steam!
+      await stream.close()
+
+      // Now we're done
+      readable.push(null)
+    })
+
+    return readable
+  }
+
+  streamValues(table: string, limit?: number): ReadableTyped<Buffer> {
+    const readable = readableCreate<Buffer>()
+
+    let sql = `SELECT v FROM ${table}`
+    if (limit) {
+      sql += ` LIMIT ${limit}`
+    }
+
+    void SqliteReadable.create<{ v: Buffer }>(this.db, sql).then(async stream => {
+      for await (const row of stream) {
+        readable.push(row.v)
+      }
+
+      // Close the statement before "finishing" the steam!
+      await stream.close()
+
+      // Now we're done
+      readable.push(null)
+    })
+
+    return readable
+  }
+
+  streamEntries(table: string, limit?: number): ReadableTyped<KeyValueDBTuple> {
+    const readable = readableCreate<KeyValueDBTuple>()
+
+    let sql = `SELECT id,v FROM ${table}`
+    if (limit) {
+      sql += ` LIMIT ${limit}`
+    }
+
+    void SqliteReadable.create<KeyValueObject>(this.db, sql).then(async stream => {
+      for await (const row of stream) {
+        readable.push([row.id, row.v])
+      }
+
+      // Close the statement before "finishing" the steam!
+      await stream.close()
+
+      // Now we're done
+      readable.push(null)
+    })
+
+    return readable
   }
 }
