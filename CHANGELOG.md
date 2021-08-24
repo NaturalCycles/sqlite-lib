@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.3...v1.1.0) (2021-08-24)
+
+
+### Features
+
+* implement streaming methods of KeyValueDB ([9da8ba7](https://github.com/NaturalCycles/sqlite-lib/commit/9da8ba7a62087b8ec36bfef8cb6c142fd43e972a))
+
 ## [1.0.3](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.2...v1.0.3) (2021-07-04)
 
 
