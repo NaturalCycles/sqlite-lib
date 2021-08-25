@@ -17,6 +17,11 @@ afterAll(async () => await db.close())
 
 describe('runCommonKeyValueDBTest', () => runCommonKeyValueDBTest(db))
 
+test('count', async () => {
+  const count = await db.count(TEST_TABLE)
+  expect(count).toBe(0)
+})
+
 // test('test1', async () => {
 //   await db.deleteByIds(TEST_TABLE, ['id1', 'id2'])
 //   await db.saveBatch(TEST_TABLE, {

@@ -16,6 +16,9 @@ runScript(async () => {
   })
   await db.open()
 
+  const count = await db.count(TEST_TABLE)
+  console.log({ count })
+
   await _pipeline([
     db.streamIds(TEST_TABLE, 50_000),
     // db.streamValues(TEST_TABLE, 50_000),

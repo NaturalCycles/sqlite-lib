@@ -192,4 +192,16 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
 
     return readable
   }
+
+  /**
+   * Count rows in the given table.
+   */
+  async count(table: string): Promise<number> {
+    const sql = `SELECT count(*) as cnt FROM ${table}`
+
+    if (this.cfg.debug) console.log(sql)
+
+    const { cnt } = (await this.db.get<{ cnt: number }>(sql))!
+    return cnt
+  }
 }
