@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/NaturalCycles/sqlite-lib/compare/v1.1.0...v1.2.0) (2021-08-25)
+
+
+### Features
+
+* `count` method on KeyValueDB ([3724a9e](https://github.com/NaturalCycles/sqlite-lib/commit/3724a9edad394e27052ad9c3af8c285ef60837cd))
+
 # [1.1.0](https://github.com/NaturalCycles/sqlite-lib/compare/v1.0.3...v1.1.0) (2021-08-24)
 
 
