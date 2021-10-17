@@ -8,11 +8,11 @@ Not gzipped (to better test streaming)
 
  */
 
+import { Readable } from 'stream'
 import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
 import { _range } from '@naturalcycles/js-lib'
 import { transformLogProgress, writableForEach, _pipeline } from '@naturalcycles/nodejs-lib'
 import { runScript } from '@naturalcycles/nodejs-lib/dist/script'
-import { Readable } from 'stream'
 import { SqliteKeyValueDB } from '../src'
 import { tmpDir } from '../src/test/paths.cnst'
 import { TestItem } from '../src/test/test.model'

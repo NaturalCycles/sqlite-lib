@@ -1,6 +1,6 @@
+import { Readable } from 'stream'
 import { ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { Database, Statement } from 'sqlite'
-import { Readable } from 'stream'
 
 /**
  * Based on: https://gist.github.com/rmela/a3bed669ad6194fb2d9670789541b0c7

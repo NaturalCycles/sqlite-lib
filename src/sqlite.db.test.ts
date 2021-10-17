@@ -13,7 +13,7 @@ test('test1', async () => {
   await db.ping()
 
   // await db.getTables()
-  await db.createTable(getTestItemSchema(), { dropIfExists: true })
+  await db.createTable(TEST_TABLE, getTestItemSchema(), { dropIfExists: true })
 
   const items = createTestItemsDBM(3)
   await db.saveBatch(TEST_TABLE, items)

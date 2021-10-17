@@ -4,9 +4,9 @@ import {
   CommonDBCreateOptions,
   CommonDBOptions,
   CommonDBSaveOptions,
-  CommonSchema,
   ObjectWithId,
 } from '@naturalcycles/db-lib'
+import { JsonSchemaObject } from '@naturalcycles/js-lib'
 import { Debug } from '@naturalcycles/nodejs-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
 import { Database, open } from 'sqlite'
@@ -70,12 +70,17 @@ export class SQLiteDB extends BaseCommonDB implements CommonDB {
     return []
   }
 
-  override async createTable(schema: CommonSchema, opt: CommonDBCreateOptions = {}): Promise<void> {
-    if (opt.dropIfExists) await this.dropTable(schema.table)
+  override async createTable<ROW extends ObjectWithId>(
+    table: string,
+    schema: JsonSchemaObject<ROW>,
+    opt: CommonDBCreateOptions = {},
+  ): Promise<void> {
+    if (opt.dropIfExists) await this.dropTable(table)
 
+    // todo: more proper schema mapping implementation is recommended
     // const sql = commonSchemaToMySQLDDL(schema)
-    const sql = `create table ${schema.table} (${schema.fields
-      .map(f => `${f.name} TEXT`)
+    const sql = `create table ${table} (${Object.keys(schema.properties)
+      .map(k => `${k} TEXT`)
       .join(', ')})`
     console.log(sql)
     await this.db.exec(sql)
