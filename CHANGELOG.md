@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/NaturalCycles/sqlite-lib/compare/v1.2.0...v1.2.1) (2021-10-17)
+
+
+### Bug Fixes
+
+* adapt to latest db-lib ([f043e61](https://github.com/NaturalCycles/sqlite-lib/commit/f043e61dced26d5d434a6e7b5f3f1af5b1dc7011))
+
 # [1.2.0](https://github.com/NaturalCycles/sqlite-lib/compare/v1.1.0...v1.2.0) (2021-08-25)
 
 
