@@ -4,9 +4,8 @@ import {
   CommonDBCreateOptions,
   CommonDBOptions,
   CommonDBSaveOptions,
-  ObjectWithId,
 } from '@naturalcycles/db-lib'
-import { JsonSchemaObject } from '@naturalcycles/js-lib'
+import { JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
 import { Debug } from '@naturalcycles/nodejs-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
 import { Database, open } from 'sqlite'
