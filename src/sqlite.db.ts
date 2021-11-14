@@ -5,8 +5,7 @@ import {
   CommonDBOptions,
   CommonDBSaveOptions,
 } from '@naturalcycles/db-lib'
-import { JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
-import { Debug } from '@naturalcycles/nodejs-lib'
+import { CommonLogger, JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
 import { Database, open } from 'sqlite'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
@@ -25,14 +24,20 @@ export interface SQLiteDBCfg {
    * @default sqlite.Database
    */
   driver?: any
+
+  logger?: CommonLogger
 }
 
-const log = Debug('nc:sqlite')
-
 export class SQLiteDB extends BaseCommonDB implements CommonDB {
-  constructor(public cfg: SQLiteDBCfg) {
+  constructor(cfg: SQLiteDBCfg) {
     super()
+    this.cfg = {
+      logger: console,
+      ...cfg,
+    }
   }
+
+  cfg: SQLiteDBCfg & { logger: CommonLogger }
 
   _db?: Database
 
@@ -50,13 +55,13 @@ export class SQLiteDB extends BaseCommonDB implements CommonDB {
       mode: OPEN_READWRITE | OPEN_CREATE, // tslint:disable-line
       ...this.cfg,
     })
-    log(`${boldWhite(this.cfg.filename)} opened`)
+    this.cfg.logger.log(`${boldWhite(this.cfg.filename)} opened`)
   }
 
   async close(): Promise<void> {
     if (!this._db) return
     await this.db.close()
-    log(`${boldWhite(this.cfg.filename)} closed`)
+    this.cfg.logger.log(`${boldWhite(this.cfg.filename)} closed`)
   }
 
   override async ping(): Promise<void> {

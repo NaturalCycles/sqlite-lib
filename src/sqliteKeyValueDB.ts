@@ -1,6 +1,6 @@
 import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
-import { pMap } from '@naturalcycles/js-lib'
-import { Debug, readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
+import { CommonLogger, pMap } from '@naturalcycles/js-lib'
+import { readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
 import { Database, open } from 'sqlite'
 import * as sqlite3 from 'sqlite3'
@@ -27,6 +27,11 @@ export interface SQLiteKeyValueDBCfg {
    * @default false
    */
   debug?: boolean
+
+  /**
+   * Defaults to `console`
+   */
+  logger?: CommonLogger
 }
 
 interface KeyValueObject {
@@ -34,10 +39,15 @@ interface KeyValueObject {
   v: Buffer
 }
 
-const log = Debug('nc:sqlite')
-
 export class SqliteKeyValueDB implements CommonKeyValueDB {
-  constructor(public cfg: SQLiteKeyValueDBCfg) {}
+  constructor(cfg: SQLiteKeyValueDBCfg) {
+    this.cfg = {
+      logger: console,
+      ...cfg,
+    }
+  }
+
+  cfg: SQLiteKeyValueDBCfg & { logger: CommonLogger }
 
   _db?: Database
 
@@ -55,13 +65,13 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
       mode: OPEN_READWRITE | OPEN_CREATE, // tslint:disable-line
       ...this.cfg,
     })
-    log(`${boldWhite(this.cfg.filename)} opened`)
+    this.cfg.logger.log(`${boldWhite(this.cfg.filename)} opened`)
   }
 
   async close(): Promise<void> {
     if (!this._db) return
     await this.db.close()
-    log(`${boldWhite(this.cfg.filename)} closed`)
+    this.cfg.logger.log(`${boldWhite(this.cfg.filename)} closed`)
   }
 
   async ping(): Promise<void> {
@@ -72,7 +82,7 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
     if (opt.dropIfExists) await this.dropTable(table)
 
     const sql = `create table ${table} (id TEXT PRIMARY KEY, v BLOB NOT NULL)`
-    console.log(sql)
+    this.cfg.logger.log(sql)
     await this.db.exec(sql)
   }
 
@@ -85,7 +95,7 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
 
   async deleteByIds(table: string, ids: string[]): Promise<void> {
     const sql = deleteByIdsSQL(table, ids)
-    if (this.cfg.debug) console.log(sql)
+    if (this.cfg.debug) this.cfg.logger.log(sql)
     await this.db.run(sql)
   }
 
@@ -95,7 +105,7 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
    */
   async getByIds(table: string, ids: string[]): Promise<KeyValueDBTuple[]> {
     const sql = selectKVSQL(table, ids)
-    if (this.cfg.debug) console.log(sql)
+    if (this.cfg.debug) this.cfg.logger.log(sql)
     const rows = await this.db.all<KeyValueObject[]>(sql)
     // console.log(rows)
     return rows.map(r => [r.id, r.v])
@@ -109,7 +119,7 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
 
     await pMap(statements, async statement => {
       const [sql, params] = statement
-      if (this.cfg.debug) console.log(sql)
+      if (this.cfg.debug) this.cfg.logger.log(sql)
       await this.db.run(sql, ...params)
     })
 
@@ -199,7 +209,7 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
   async count(table: string): Promise<number> {
     const sql = `SELECT count(*) as cnt FROM ${table}`
 
-    if (this.cfg.debug) console.log(sql)
+    if (this.cfg.debug) this.cfg.logger.log(sql)
 
     const { cnt } = (await this.db.get<{ cnt: number }>(sql))!
     return cnt
