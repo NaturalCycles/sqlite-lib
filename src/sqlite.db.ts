@@ -97,10 +97,10 @@ export class SQLiteDB extends BaseCommonDB implements CommonDB {
     await this.db.exec(`DROP TABLE IF EXISTS ${table}`)
   }
 
-  override async saveBatch<ROW extends ObjectWithId>(
+  override async saveBatch<ROW extends Partial<ObjectWithId>>(
     table: string,
     rows: ROW[],
-    _opt?: CommonDBSaveOptions,
+    _opt?: CommonDBSaveOptions<ROW>,
   ): Promise<void> {
     if (!rows.length) return
 
