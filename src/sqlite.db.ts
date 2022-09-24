@@ -8,8 +8,8 @@ import {
 import { CommonLogger, JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
 import { Database, open } from 'sqlite'
-import { OPEN_CREATE, OPEN_READWRITE } from '@vscode/sqlite3'
-import * as sqlite3 from '@vscode/sqlite3'
+import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
+import * as sqlite3 from 'sqlite3'
 import { insertSQL } from './query.util'
 
 export interface SQLiteDBCfg {
