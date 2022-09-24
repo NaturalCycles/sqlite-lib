@@ -1,25 +1,12 @@
 import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
-import { CommonLogger, pMap } from '@naturalcycles/js-lib'
+import { CommonLogger } from '@naturalcycles/js-lib'
 import { readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
-import { Database, open } from 'sqlite'
-import * as sqlite3 from 'sqlite3'
-import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
-import { deleteByIdsSQL, insertKVSQL, selectKVSQL } from './query.util'
-import { SqliteReadable } from './stream.util'
+import type { Options, Database } from 'better-sqlite3'
+import * as BetterSqlite3 from 'better-sqlite3'
 
-export interface SQLiteKeyValueDBCfg {
+export interface BetterSQLiteKeyValueDBCfg extends Options {
   filename: string
-
-  /**
-   * @default OPEN_READWRITE | OPEN_CREATE
-   */
-  mode?: number
-
-  /**
-   * @default sqlite.Database
-   */
-  driver?: any
 
   /**
    * Will log all sql queries executed.
@@ -39,65 +26,69 @@ interface KeyValueObject {
   v: Buffer
 }
 
-export class SqliteKeyValueDB implements CommonKeyValueDB {
-  constructor(cfg: SQLiteKeyValueDBCfg) {
+/**
+ * @experimental
+ */
+export class BetterSqliteKeyValueDB implements CommonKeyValueDB {
+  constructor(cfg: BetterSQLiteKeyValueDBCfg) {
     this.cfg = {
       logger: console,
       ...cfg,
     }
   }
 
-  cfg: SQLiteKeyValueDBCfg & { logger: CommonLogger }
+  cfg: BetterSQLiteKeyValueDBCfg & { logger: CommonLogger }
 
   _db?: Database
 
   get db(): Database {
-    if (!this._db)
-      throw new Error('await SqliteKeyValueDB.open() should be called before using the DB')
-    return this._db
+    if (!this._db) {
+      this.open()
+    }
+
+    return this._db!
   }
 
-  async open(): Promise<void> {
+  open(): void {
     if (this._db) return
 
-    this._db = await open({
-      driver: sqlite3.Database,
-      // eslint-disable-next-line no-bitwise
-      mode: OPEN_READWRITE | OPEN_CREATE,
+    this._db = new BetterSqlite3(this.cfg.filename, {
+      verbose: this.cfg.debug ? this.cfg.logger.log : undefined,
       ...this.cfg,
     })
+
     this.cfg.logger.log(`${boldWhite(this.cfg.filename)} opened`)
   }
 
-  async close(): Promise<void> {
+  close(): void {
     if (!this._db) return
-    await this.db.close()
+    this.db.close()
     this.cfg.logger.log(`${boldWhite(this.cfg.filename)} closed`)
   }
 
   async ping(): Promise<void> {
-    await this.open()
+    this.open()
   }
 
   async createTable(table: string, opt: CommonDBCreateOptions = {}): Promise<void> {
-    if (opt.dropIfExists) await this.dropTable(table)
+    if (opt.dropIfExists) this.dropTable(table)
 
     const sql = `create table ${table} (id TEXT PRIMARY KEY, v BLOB NOT NULL)`
     this.cfg.logger.log(sql)
-    await this.db.exec(sql)
+    this.db.prepare(sql).run()
   }
 
   /**
    * Use with caution!
    */
-  async dropTable(table: string): Promise<void> {
-    await this.db.exec(`DROP TABLE IF EXISTS ${table}`)
+  dropTable(table: string): void {
+    this.db.prepare(`DROP TABLE IF EXISTS ${table}`).run()
   }
 
   async deleteByIds(table: string, ids: string[]): Promise<void> {
-    const sql = deleteByIdsSQL(table, ids)
+    const sql = `DELETE FROM ${table} WHERE id in (${ids.map(id => `'${id}'`).join(',')})`
     if (this.cfg.debug) this.cfg.logger.log(sql)
-    await this.db.run(sql)
+    this.db.prepare(sql).run()
   }
 
   /**
@@ -105,34 +96,30 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
    * Here in the array of rows we have no way to map row to id (it's an opaque Buffer).
    */
   async getByIds(table: string, ids: string[]): Promise<KeyValueDBTuple[]> {
-    const sql = selectKVSQL(table, ids)
+    const sql = `SELECT id,v FROM ${table} where id in (${ids.map(id => `'${id}'`).join(',')})`
     if (this.cfg.debug) this.cfg.logger.log(sql)
-    const rows = await this.db.all<KeyValueObject[]>(sql)
+    const rows = this.db.prepare(sql).all() as KeyValueObject[]
     // console.log(rows)
     return rows.map(r => [r.id, r.v])
   }
 
   async saveBatch(table: string, entries: KeyValueDBTuple[]): Promise<void> {
-    // todo: speedup
-    const statements = insertKVSQL(table, entries)
+    const sql = `INSERT INTO ${table} (id, v) VALUES (?, ?)`
+    if (this.cfg.debug) this.cfg.logger.log(sql)
 
-    // if (statements.length > 1) await this.db.run('BEGIN TRANSACTION')
+    const stmt = this.db.prepare(sql)
 
-    await pMap(statements, async statement => {
-      const [sql, params] = statement
-      if (this.cfg.debug) this.cfg.logger.log(sql)
-      await this.db.run(sql, ...params)
+    entries.forEach(([id, buf]) => {
+      stmt.run(id, buf)
     })
-
-    // if (statements.length > 1) await this.db.run('END TRANSACTION')
   }
 
   async beginTransaction(): Promise<void> {
-    await this.db.run(`BEGIN TRANSACTION`)
+    this.db.exec(`BEGIN TRANSACTION`)
   }
 
   async endTransaction(): Promise<void> {
-    await this.db.run(`END TRANSACTION`)
+    this.db.exec(`END TRANSACTION`)
   }
 
   streamIds(table: string, limit?: number): ReadableTyped<string> {
@@ -143,17 +130,14 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
       sql += ` LIMIT ${limit}`
     }
 
-    void SqliteReadable.create<{ id: string }>(this.db, sql).then(async stream => {
-      for await (const row of stream) {
-        readable.push(row.id)
+    void (async () => {
+      for (const row of this.db.prepare(sql).iterate()) {
+        readable.push((row as { id: string }).id)
       }
-
-      // Close the statement before "finishing" the steam!
-      await stream.close()
 
       // Now we're done
       readable.push(null)
-    })
+    })()
 
     return readable
   }
@@ -166,17 +150,14 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
       sql += ` LIMIT ${limit}`
     }
 
-    void SqliteReadable.create<{ v: Buffer }>(this.db, sql).then(async stream => {
-      for await (const row of stream) {
-        readable.push(row.v)
+    void (async () => {
+      for (const row of this.db.prepare(sql).iterate()) {
+        readable.push((row as { v: Buffer }).v)
       }
-
-      // Close the statement before "finishing" the steam!
-      await stream.close()
 
       // Now we're done
       readable.push(null)
-    })
+    })()
 
     return readable
   }
@@ -189,17 +170,14 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
       sql += ` LIMIT ${limit}`
     }
 
-    void SqliteReadable.create<KeyValueObject>(this.db, sql).then(async stream => {
-      for await (const row of stream) {
+    void (async () => {
+      for (const row of this.db.prepare(sql).iterate()) {
         readable.push([row.id, row.v])
       }
 
-      // Close the statement before "finishing" the steam!
-      await stream.close()
-
       // Now we're done
       readable.push(null)
-    })
+    })()
 
     return readable
   }
@@ -212,7 +190,7 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
 
     if (this.cfg.debug) this.cfg.logger.log(sql)
 
-    const { cnt } = (await this.db.get<{ cnt: number }>(sql))!
+    const { cnt } = this.db.prepare(sql).get() as { cnt: number }
     return cnt
   }
 }

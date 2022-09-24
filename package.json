@@ -7,8 +7,10 @@
     "@naturalcycles/db-lib": "^8.7.0",
     "@naturalcycles/js-lib": "^14.27.0",
     "@naturalcycles/nodejs-lib": "^12.14.5",
+    "@types/better-sqlite3": "^7.6.0",
+    "better-sqlite3": "^7.6.2",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^4.0.23",
+    "sqlite": "^4.1.2",
     "sqlite3": "^5.1.1"
   },
   "devDependencies": {

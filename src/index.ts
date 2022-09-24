@@ -1,6 +1,7 @@
 import { SQLiteDB, SQLiteDBCfg } from './sqlite.db'
-import { SqliteKeyValueDB, SQLiteKeyValueDBCfg } from './sqliteKeyValueDB'
+export * from './sqliteKeyValueDB'
+export * from './betterSqliteKeyValueDB'
 
-export type { SQLiteDBCfg, SQLiteKeyValueDBCfg }
+export type { SQLiteDBCfg }
 
-export { SQLiteDB, SqliteKeyValueDB }
+export { SQLiteDB }

@@ -18,10 +18,11 @@ import { tmpDir } from '../src/test/paths.cnst'
 import { TestItem } from '../src/test/test.model'
 
 runScript(async () => {
-  const db = new SqliteKeyValueDB({
-    filename: `${tmpDir}/test.sqlite`,
-    // debug: true,
-  })
+  const filename = `${tmpDir}/test.sqlite`
+  const db = new SqliteKeyValueDB({ filename })
+  // "Better" is 6 seconds vs 14 seconds before
+  // const db = new BetterSqliteKeyValueDB({ filename })
+
   await db.ping()
   await db.createTable(TEST_TABLE, { dropIfExists: true })
   await db.beginTransaction()
