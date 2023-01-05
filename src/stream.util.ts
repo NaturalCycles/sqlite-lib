@@ -1,4 +1,4 @@
-import { Readable } from 'stream'
+import { Readable } from 'node:stream'
 import { ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { Database, Statement } from 'sqlite'
 

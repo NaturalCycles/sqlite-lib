@@ -8,7 +8,7 @@ Not gzipped (to better test streaming)
 
  */
 
-import { Readable } from 'stream'
+import { Readable } from 'node:stream'
 import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
 import { _range } from '@naturalcycles/js-lib'
 import { transformLogProgress, writableForEach, _pipeline } from '@naturalcycles/nodejs-lib'

@@ -114,7 +114,7 @@ export class SQLiteDB extends BaseCommonDB implements CommonDB {
 
   override async getByIds<ROW extends ObjectWithId>(
     _table: string,
-    _ids: string[],
+    _ids: ROW['id'][],
     _opt?: CommonDBOptions,
   ): Promise<ROW[]> {
     // todo: implement all query.util from mysql
