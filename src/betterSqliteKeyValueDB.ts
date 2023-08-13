@@ -1,7 +1,7 @@
 import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
 import { CommonLogger } from '@naturalcycles/js-lib'
 import { readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
-import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
+import { boldWhite } from '@naturalcycles/nodejs-lib'
 import type { Options, Database } from 'better-sqlite3'
 import * as BetterSqlite3 from 'better-sqlite3'
 
@@ -172,7 +172,7 @@ export class BetterSqliteKeyValueDB implements CommonKeyValueDB {
 
     void (async () => {
       for (const row of this.db.prepare(sql).iterate()) {
-        readable.push([row.id, row.v])
+        readable.push([(row as any).id, (row as any).v])
       }
 
       // Now we're done

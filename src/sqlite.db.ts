@@ -6,7 +6,7 @@ import {
   CommonDBSaveOptions,
 } from '@naturalcycles/db-lib'
 import { CommonLogger, JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
-import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
+import { boldWhite } from '@naturalcycles/nodejs-lib'
 import { Database, open } from 'sqlite'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
 import * as sqlite3 from 'sqlite3'

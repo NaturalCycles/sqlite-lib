@@ -1,7 +1,7 @@
 import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
 import { CommonLogger, pMap } from '@naturalcycles/js-lib'
 import { readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
-import { boldWhite } from '@naturalcycles/nodejs-lib/dist/colors'
+import { boldWhite } from '@naturalcycles/nodejs-lib'
 import { Database, open } from 'sqlite'
 import * as sqlite3 from 'sqlite3'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
