@@ -5,8 +5,12 @@ DEBUG=nc* yarn tsn streamingTest
  */
 
 import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
-import { transformLogProgress, writableForEach, _pipeline } from '@naturalcycles/nodejs-lib'
-import { runScript } from '@naturalcycles/nodejs-lib'
+import {
+  transformLogProgress,
+  writableForEach,
+  _pipeline,
+  runScript,
+} from '@naturalcycles/nodejs-lib'
 import { SqliteKeyValueDB } from '../src'
 import { tmpDir } from '../src/test/paths.cnst'
 
