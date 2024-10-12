@@ -1,7 +1,7 @@
 import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
-import { CommonLogger } from '@naturalcycles/js-lib'
-import { readableCreate, ReadableTyped, boldWhite } from '@naturalcycles/nodejs-lib'
-import type { Options, Database } from 'better-sqlite3'
+import { AppError, CommonLogger } from '@naturalcycles/js-lib'
+import { boldWhite, readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
+import type { Database, Options } from 'better-sqlite3'
 import BetterSqlite3 from 'better-sqlite3'
 
 export interface BetterSQLiteKeyValueDBCfg extends Options {
@@ -191,5 +191,9 @@ export class BetterSqliteKeyValueDB implements CommonKeyValueDB {
 
     const { cnt } = this.db.prepare(sql).get() as { cnt: number }
     return cnt
+  }
+
+  async increment(_table: string, _id: string, _by?: number): Promise<number> {
+    throw new AppError('Not implemented')
   }
 }

@@ -1,6 +1,6 @@
 import { CommonDBCreateOptions, CommonKeyValueDB, KeyValueDBTuple } from '@naturalcycles/db-lib'
-import { CommonLogger, pMap } from '@naturalcycles/js-lib'
-import { readableCreate, ReadableTyped, boldWhite } from '@naturalcycles/nodejs-lib'
+import { AppError, CommonLogger, pMap } from '@naturalcycles/js-lib'
+import { boldWhite, readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { Database, open } from 'sqlite'
 import * as sqlite3 from 'sqlite3'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
@@ -51,8 +51,9 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
   _db?: Database
 
   get db(): Database {
-    if (!this._db)
+    if (!this._db) {
       throw new Error('await SqliteKeyValueDB.open() should be called before using the DB')
+    }
     return this._db
   }
 
@@ -213,5 +214,9 @@ export class SqliteKeyValueDB implements CommonKeyValueDB {
 
     const { cnt } = (await this.db.get<{ cnt: number }>(sql))!
     return cnt
+  }
+
+  async increment(_table: string, _id: string, _by?: number): Promise<number> {
+    throw new AppError('Not implemented')
   }
 }

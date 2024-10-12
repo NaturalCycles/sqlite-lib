@@ -12,10 +12,10 @@ import { Readable } from 'node:stream'
 import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
 import { _range } from '@naturalcycles/js-lib'
 import {
-  transformLogProgress,
-  writableForEach,
   _pipeline,
   runScript,
+  transformLogProgress,
+  writableForEach,
 } from '@naturalcycles/nodejs-lib'
 import { SqliteKeyValueDB } from '../src'
 import { tmpDir } from '../src/test/paths.cnst'
