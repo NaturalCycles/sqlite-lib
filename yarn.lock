@@ -1007,17 +1007,17 @@
     typescript "^5.0.2"
 
 "@naturalcycles/db-lib@^9.1.0":
-  version "9.20.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-9.20.0.tgz#659d1d12e72f587e47e8197cdeea18ce6e40156c"
-  integrity sha512-FjTTEy3vHOGyrA4394N1pTKd6BVjwa77jpUpZaqPOfwJ4EzNksDaUSND4j6apbfCaAnoIeaAPM268fK3vgMuYQ==
+  version "9.22.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-9.22.0.tgz#d01153b033e22155ade705aa049fe089978c5798"
+  integrity sha512-989fWQqlfMrtoaKxzqWN2Eh7Y7MrJcqoq5wl7Uldm84eUe3OUY87H0BYgGr/1kO309l2EuzhEkkEzcuO9QyKJw==
   dependencies:
     "@naturalcycles/js-lib" "^14.116.0"
     "@naturalcycles/nodejs-lib" "^13.1.1"
 
 "@naturalcycles/dev-lib@^15.21.0":
-  version "15.21.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/dev-lib/-/dev-lib-15.21.0.tgz#da26103e4b8c65ead643a668fead7433e86555ae"
-  integrity sha512-0eGFi4XuDtdj4kuO0cANmlbtr3Q4La6g6UHZnV85xZB7CZbqVZ1Si46l2RBnqP0F//8tgP3YLZMPpmyWFAte0g==
+  version "15.22.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/dev-lib/-/dev-lib-15.22.0.tgz#f1a31b5e0483e2d5beaadf8e5bce9345789b9fef"
+  integrity sha512-QZQEvP2yM27hDATOOHoaNDXXphUwt/dDMbVd7RATQMGoSmjV8QYANJSisWLPAVAee1eF+yQ+t/SUDNrtFoLSXg==
   dependencies:
     "@biomejs/biome" "^1.8.3"
     "@commitlint/cli" "^19.0.0"

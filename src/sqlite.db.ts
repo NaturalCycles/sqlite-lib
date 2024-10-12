@@ -28,6 +28,9 @@ export interface SQLiteDBCfg {
   logger?: CommonLogger
 }
 
+/**
+ * todo: Warning: this implementation is incomplete!
+ */
 export class SQLiteDB extends BaseCommonDB implements CommonDB {
   constructor(cfg: SQLiteDBCfg) {
     super()

@@ -41,7 +41,7 @@
     "url": "https://github.com/NaturalCycles/sqlite-lib"
   },
   "engines": {
-    "node": ">=18.12.0"
+    "node": ">=20.13.0"
   },
   "version": "1.2.1",
   "description": "CommonDB implementation based on SQLite",
