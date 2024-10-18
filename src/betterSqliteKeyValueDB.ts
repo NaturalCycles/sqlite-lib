@@ -2,9 +2,10 @@ import {
   CommonDBCreateOptions,
   CommonKeyValueDB,
   commonKeyValueDBFullSupport,
+  IncrementTuple,
   KeyValueDBTuple,
 } from '@naturalcycles/db-lib'
-import { AppError, CommonLogger, StringMap } from '@naturalcycles/js-lib'
+import { AppError, CommonLogger } from '@naturalcycles/js-lib'
 import { boldWhite, readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import type { Database, Options } from 'better-sqlite3'
 import BetterSqlite3 from 'better-sqlite3'
@@ -207,10 +208,7 @@ export class BetterSqliteKeyValueDB implements CommonKeyValueDB {
     throw new AppError('Not implemented')
   }
 
-  async incrementBatch(
-    _table: string,
-    _incrementMap: StringMap<number>,
-  ): Promise<StringMap<number>> {
+  async incrementBatch(_table: string, _entries: IncrementTuple[]): Promise<IncrementTuple[]> {
     throw new AppError('Not implemented')
   }
 }
