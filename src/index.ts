@@ -1,3 +1,3 @@
-export * from './betterSqliteKeyValueDB'
-export * from './sqlite.db'
-export * from './sqliteKeyValueDB'
+export * from './betterSqliteKeyValueDB.js'
+export * from './sqlite.db.js'
+export * from './sqliteKeyValueDB.js'

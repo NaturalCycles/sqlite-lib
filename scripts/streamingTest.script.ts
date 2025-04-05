@@ -1,18 +1,18 @@
 /*
 
-DEBUG=nc* yarn tsn streamingTest
+yarn tsx scripts/streamingTest.script.ts
 
  */
 
-import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
+import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing/index.js'
 import {
   _pipeline,
   runScript,
   transformLogProgress,
   writableForEach,
 } from '@naturalcycles/nodejs-lib'
-import { SqliteKeyValueDB } from '../src'
-import { tmpDir } from '../src/test/paths.cnst'
+import { SqliteKeyValueDB } from '../src/index.js'
+import { tmpDir } from '../src/test/paths.cnst.js'
 
 runScript(async () => {
   const filename = `${tmpDir}/test.sqlite`

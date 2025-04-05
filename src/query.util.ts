@@ -1,5 +1,6 @@
-import { KeyValueDBTuple } from '@naturalcycles/db-lib'
-import { SQL, SQLStatement } from 'sql-template-strings'
+import type { KeyValueDBTuple } from '@naturalcycles/db-lib'
+import type { SQLStatement } from 'sql-template-strings'
+import { SQL } from 'sql-template-strings'
 
 export type SQLWithParams = [sql: string, params: any[]]
 

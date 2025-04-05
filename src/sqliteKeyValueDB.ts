@@ -1,17 +1,20 @@
-import {
+import type {
   CommonDBCreateOptions,
   CommonKeyValueDB,
-  commonKeyValueDBFullSupport,
   IncrementTuple,
   KeyValueDBTuple,
 } from '@naturalcycles/db-lib'
-import { AppError, CommonLogger, pMap } from '@naturalcycles/js-lib'
-import { boldWhite, readableCreate, ReadableTyped } from '@naturalcycles/nodejs-lib'
-import { Database, open } from 'sqlite'
+import { commonKeyValueDBFullSupport } from '@naturalcycles/db-lib'
+import type { CommonLogger } from '@naturalcycles/js-lib'
+import { AppError, pMap } from '@naturalcycles/js-lib'
+import type { ReadableTyped } from '@naturalcycles/nodejs-lib'
+import { boldWhite, readableCreate } from '@naturalcycles/nodejs-lib'
+import type { Database } from 'sqlite'
+import { open } from 'sqlite'
 import * as sqlite3 from 'sqlite3'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
-import { deleteByIdsSQL, insertKVSQL, selectKVSQL } from './query.util'
-import { SqliteReadable } from './stream.util'
+import { deleteByIdsSQL, insertKVSQL, selectKVSQL } from './query.util.js'
+import { SqliteReadable } from './stream.util.js'
 
 export interface SQLiteKeyValueDBCfg {
   filename: string

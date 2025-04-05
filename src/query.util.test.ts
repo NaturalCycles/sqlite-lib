@@ -1,5 +1,6 @@
-import { createTestItemsDBM, TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
-import { insertSQL } from './query.util'
+import { createTestItemsDBM, TEST_TABLE } from '@naturalcycles/db-lib/dist/testing/index.js'
+import { test } from 'vitest'
+import { insertSQL } from './query.util.js'
 
 test('insertSQL', () => {
   const items = createTestItemsDBM(3)

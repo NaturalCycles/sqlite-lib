@@ -1,6 +1,6 @@
 /*
 
-DEBUG=nc* yarn tsn generateTestTable
+yarn tsx scripts/generateTestTable.script.ts
 
 Creates ./tmp/test.sqlite
 Fills it with 1M rows of TestItem
@@ -9,7 +9,7 @@ Not gzipped (to better test streaming)
  */
 
 import { Readable } from 'node:stream'
-import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
+import { TEST_TABLE } from '@naturalcycles/db-lib/dist/testing/index.js'
 import { _range } from '@naturalcycles/js-lib'
 import {
   _pipeline,
@@ -17,9 +17,9 @@ import {
   transformLogProgress,
   writableForEach,
 } from '@naturalcycles/nodejs-lib'
-import { SqliteKeyValueDB } from '../src'
-import { tmpDir } from '../src/test/paths.cnst'
-import { TestItem } from '../src/test/test.model'
+import { SqliteKeyValueDB } from '../src/index.js'
+import { tmpDir } from '../src/test/paths.cnst.js'
+import type { TestItem } from '../src/test/test.model.js'
 
 runScript(async () => {
   const filename = `${tmpDir}/test.sqlite`

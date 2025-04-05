@@ -1,16 +1,17 @@
-import {
-  BaseCommonDB,
+import type {
   CommonDB,
   CommonDBCreateOptions,
   CommonDBOptions,
   CommonDBSaveOptions,
 } from '@naturalcycles/db-lib'
-import { CommonLogger, JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
+import { BaseCommonDB } from '@naturalcycles/db-lib'
+import type { CommonLogger, JsonSchemaObject, ObjectWithId } from '@naturalcycles/js-lib'
 import { boldWhite } from '@naturalcycles/nodejs-lib'
-import { Database, open } from 'sqlite'
+import type { Database } from 'sqlite'
+import { open } from 'sqlite'
 import { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3'
 import * as sqlite3 from 'sqlite3'
-import { insertSQL } from './query.util'
+import { insertSQL } from './query.util.js'
 
 export interface SQLiteDBCfg {
   filename: string

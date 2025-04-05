@@ -1,5 +1,6 @@
-import { runCommonKeyValueDBTest, TEST_TABLE } from '@naturalcycles/db-lib/dist/testing'
-import { SqliteKeyValueDB } from './sqliteKeyValueDB'
+import { runCommonKeyValueDBTest, TEST_TABLE } from '@naturalcycles/db-lib/dist/testing/index.js'
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+import { SqliteKeyValueDB } from './sqliteKeyValueDB.js'
 
 const db = new SqliteKeyValueDB({
   filename: ':memory:',
