@@ -15,7 +15,9 @@ beforeAll(async () => {
 
 afterAll(() => db.close())
 
-describe('runCommonKeyValueDBTest', () => runCommonKeyValueDBTest(db))
+describe('runCommonKeyValueDBTest', async () => {
+  await runCommonKeyValueDBTest(db)
+})
 
 test('count', async () => {
   const count = await db.count(TEST_TABLE)
